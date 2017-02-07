@@ -17,7 +17,7 @@ router.get('/all', function (req, res) {
 router.get('/:id', function (req, res) {
     knex.raw('select * from "performers" where id = ?', req.params.id)
         .then(function (performer) {
-        res.send(performer);
+        res.send(performer.rows[0]);
     });
 });
 // create single performer

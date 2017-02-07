@@ -11,6 +11,7 @@ exports.up = function (knex, Promise) {
             .inTable('performers');
         table.string('location_city').notNullable();
         table.string('location_state').notNullable(); // integer
+        table.text('description'); // integer
     });
 };
 exports.down = function (knex, Promise) {

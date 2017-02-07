@@ -15,6 +15,21 @@ router.get('/all', function (req, res) {
         res.send(populatedArr);
     });
 });
+// query events
+router.get('/search', function (req, res) {
+  if(req.query.location) {
+    knex('events').where({location_state: req.query.location})
+                  .then(function(result) {
+                    res.send(result)
+                  });
+  } else {
+    knex('performers').where('stage_name', 'like', '%'+req.query.performer+'%')
+                  .then(function(result) {
+                    res.send(result)
+                  });
+  }
+
+});
 // get single event
 router.get('/:id', function (req, res) {
   populate.getOne({table: 'events', id: req.params.id}, 'performers').then(function (result) {
