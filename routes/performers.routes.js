@@ -8,37 +8,42 @@ router.use(function timeLog(req, res, next) {
 });
 // get all performers
 router.get('/all', function (req, res) {
-    knex.raw('select * from "performers"')
-        .then(function (performers) {
-        res.send(performers);
-    });
+    knex('performers')
+      .select()
+      .then(performers => res.send(performers));
 });
-// get single performers
+// get single performer
 router.get('/:id', function (req, res) {
-    knex.raw('select * from "performers" where id = ?', req.params.id)
-        .then(function (performer) {
-        res.send(performer.rows[0]);
-    });
+    knex('performers')
+      .select()
+      .where('id', req.params.id)
+      .then(performers => res.send(performers));
 });
 // create single performer
 router.get('/add', function (req, res) {
-    knex.raw('select * from "performers" where id = ?', req.params.id)
-        .then(function (performer) {
-        res.send(performer);
-    });
+    knex('performers')
+      .insert(req.body)
+      .then(() => {
+        knex('performers').select().then(performers => res.send(performers));
+      });
 });
-// edit/update single performers
-router.put('/:id', function (req, res) {
-    knex.raw('select * from "performers" where id = ?', req.params.id)
-        .then(function (performer) {
-        res.send(performer);
-    });
+// edit/update single performer
+router.patch('/:id', function (req, res) {
+    knex('performers')
+      .update(req.body)
+      .where('id', req.params.id)
+      .then(() => {
+        knex('performers').select().then(performers => res.send(performers));
+      });
 });
-// archive single performers
-router.put('/:id', function (req, res) {
-    knex.raw('select * from "performers" where id = ?', req.params.id)
-        .then(function (performer) {
-        res.send(performer);
-    });
+// delete single performer
+router.delete('/:id', function (req, res) {
+    knex('performers')
+      .del()
+      .where('id', req.params.id)
+      .then(() => {
+        knex('performers').select().then(performers => res.send(performers));
+      });
 });
+
 module.exports = router;

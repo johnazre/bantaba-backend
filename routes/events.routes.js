@@ -37,25 +37,32 @@ router.get('/:id', function (req, res) {
       res.send(populatedArr);
   });
 });
-// create single event
-router.post('/add', function (req, res) {
-    knex.raw('insert into events(name, performer_id, location_city, location_state) values(?, ?, ?, ?)', [req.body.name, req.body.performer_id, req.body.location_city, req.body.location_state])
-        .then(function (event) {
-        res.send(event);
-    });
+
+// create single admin
+router.get('/add', function (req, res) {
+    knex('events')
+      .insert(req.body)
+      .then(() => {
+        knex('events').select().then(events => res.send(events));
+      });
 });
 // edit/update single event
-router.put('/:id', function (req, res) {
-    knex.raw("update events set "+ req.body.field +" = ? where id = ?", [req.body.value, req.params.id])
-        .then(function (event) {
-        res.send(event);
-    });
+router.patch('/:id', function (req, res) {
+    knex('events')
+      .update(req.body)
+      .where('id', req.params.id)
+      .then(() => {
+        knex('events').select().then(events => res.send(events));
+      });
 });
 // archive single event
-router.put('/:id', function (req, res) {
-    knex.raw('select * from "events" where id = ?', req.params.id)
-        .then(function (event) {
-        res.send(event);
-    });
+router.delete('/:id', function (req, res) {
+    knex('events')
+      .del()
+      .where('id', req.params.id)
+      .then(() => {
+        knex('events').select().then(events => res.send(events));
+      });
 });
+
 module.exports = router;

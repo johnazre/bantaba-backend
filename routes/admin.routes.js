@@ -8,37 +8,41 @@ router.use(function timeLog(req, res, next) {
 });
 // get all admin
 router.get('/all', function (req, res) {
-    knex.raw('select * from "admin"')
-        .then(function (admin) {
-        res.send(admin);
-    });
+    knex('admin')
+      .select()
+      .then(admin => res.send(admin));
 });
 // get single admin
 router.get('/:id', function (req, res) {
-    knex.raw('select * from "admin" where id = ?', req.params.id)
-        .then(function (admin) {
-        res.send(admin);
-    });
+    knex('admin')
+      .select()
+      .where('id', req.params.id)
+      .then(admin => res.send(admin));
 });
 // create single admin
 router.get('/add', function (req, res) {
-    knex.raw('select * from "admin" where id = ?', req.params.id)
-        .then(function (admin) {
-        res.send(admin);
-    });
+    knex('admin')
+      .insert(req.body)
+      .then(() => {
+        knex('admin').select().then(admin => res.send(admin));
+      });
 });
 // edit/update single admin
-router.put('/:id', function (req, res) {
-    knex.raw('select * from "admin" where id = ?', req.params.id)
-        .then(function (admin) {
-        res.send(admin);
-    });
+router.patch('/:id', function (req, res) {
+    knex('admin')
+      .update(req.body)
+      .where('id', req.params.id)
+      .then(() => {
+        knex('admin').select().then(admin => res.send(admin));
+      });
 });
 // archive single admin
-router.put('/:id', function (req, res) {
-    knex.raw('select * from "admin" where id = ?', req.params.id)
-        .then(function (admin) {
-        res.send(admin);
-    });
+router.delete('/:id', function (req, res) {
+    knex('admin')
+      .del()
+      .where('id', req.params.id)
+      .then(() => {
+        knex('admin').select().then(admin => res.send(admin));
+      });
 });
 module.exports = router;
