@@ -3,11 +3,6 @@ var router = express.Router();
 var knex = require('../db/knex');
 var populate = require('../lib/populate');
 
-// middleware that is specific to this router
-router.use(function timeLog(req, res, next) {
-    console.log('Time: ', Date.now());
-    next();
-});
 // get all events
 router.get('/all', function (req, res) {
     populate.getAll('events', 'performers').then(function (result) {
@@ -18,15 +13,17 @@ router.get('/all', function (req, res) {
 // query events
 router.get('/search', function (req, res) {
   if(req.query.location) {
-    knex('events').where({location_state: req.query.location})
-                  .then(function(result) {
-                    res.send(result)
-                  });
+    knex('events')
+      .where({location_state: req.query.location})
+      .then(function(result) {
+        res.send(result);
+      });
   } else {
-    knex('performers').where('stage_name', 'like', '%'+req.query.performer+'%')
-                  .then(function(result) {
-                    res.send(result)
-                  });
+    knex('performers')
+      .where('stage_name', 'like', '%'+req.query.performer+'%')
+      .then(function(result) {
+        res.send(result);
+      });
   }
 
 });

@@ -1,11 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var knex = require('../db/knex');
-// middleware that is specific to this router
-router.use(function timeLog(req, res, next) {
-    console.log('Time: ', Date.now());
-    next();
-});
+
 // get all admin
 router.get('/all', function (req, res) {
     knex('admin')

@@ -2,11 +2,7 @@ var express = require('express');
 var router = express.Router();
 var knex = require('../db/knex');
 var validator = require('validator');
-// middleware that is specific to this router
-router.use(function timeLog(req, res, next) {
-    console.log('Time: ', Date.now());
-    next();
-});
+
 // get all users
 router.get('/all', function (req, res) {
     knex('users').select().then(users => res.send(users));
